@@ -1,0 +1,49 @@
+import = ["~/.config/alacritty/twz-color-scheme.toml"]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 8
+padding.y = 8
+
+decorations = "Buttonless"
+
+opacity = 0.7
+blur = true
+
+option_as_alt = "Both"
+
+[font]
+normal.family = "JetBrainsMono Nerd Font Propo"
+normal.style = "Medium"
+
+bold.family = "JetBrainsMono Nerd Font Propo"
+bold.style = "Bold"
+
+italic.family = "JetBrainsMono Nerd Font Propo"
+italic.style = "MediumItalic"
+
+bold_italic.family = "JetBrainsMono Nerd Font Propo"
+bold_italic.style = "BoldItalic"
+
+size = 19
+
+[keyboard]
+bindings = [
+  #### ---- Already set up equivalents in .zshrc
+  # { key = "ArrowLeft", mods = "Command", chars = "\u0001" },  # Start of line
+  # { key = "ArrowRight", mods = "Command", chars = "\u0005" }, # End of line
+  # { key = "ArrowLeft", mods = "Option", chars = "\u001b\u0062" },  # Jump left a word
+  # { key = "ArrowRight", mods = "Option", chars = "\u001b\u0066" }, # Jump right a word
+  #### ---- END
+
+  { key = "Backspace", mods = "Super", chars = "\u0018\u007f" },  # delete line left of cursor, with `bindkey "^X\\x7f" backward-kill-line` in .zshrc
+  { key = "Delete", mods = "Super", chars = "\u000b" },           # delete line right of cursor
+  { key = "Backspace", mods = "Option", chars = "\u001b\u0008" }, # delete word left of cursor
+  { key = "Delete", mods = "Option", chars = "\u001b\u0064" },    # delete word right of cursor
+
+  # Undo / Redo
+  { key = "Z", mods = "Super", chars = "\u001f" },               # undo
+  { key = "Z", mods = "Super | Shift", chars = "\u0018\u001f" }, # redo, with `bindkey "^X^_" redo` in .zshrc
+]
