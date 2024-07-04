@@ -1,0 +1,79 @@
+# starship.toml
+#
+# TWZ's Starship configuration
+#
+# reference: https://github.com/andrew8088/dotfiles/blob/main/starship/starship.toml
+
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+format = """
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$git_metrics\
+$fill\
+$nodejs ${custom.pnpm}\
+$cmd_duration $jobs $time\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[❯](red)"
+
+[directory]
+read_only = " "
+truncation_length = 4
+truncate_to_repo = false
+
+[git_branch]
+symbol = " "
+format = "[$symbol$branch]($style) "
+style = "bold bright-black"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "cyan"
+
+[git_metrics]
+disabled = false
+
+[fill]
+symbol = " "
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+version_format = '${raw}'
+style = "fg:#6cc24a"
+
+[custom.pnpm]
+detect_files = ['pnpm-lock.yaml']
+command = 'pnpm --version'
+when = 'test -f pnpm-lock.yaml'
+symbol = "󰋁"
+format = '[$symbol $output]($style)'
+style = 'fg:#F9AD00'
+
+[cmd_duration]
+format = "[$duration]($style)"
+style = "yellow"
+
+[jobs]
+symbol = ""
+style = "bold red"
+number_threshold = 1
+format = "[$symbol]($style)"
+
+[time]
+disabled = false
+style = "bright-black"
+format = "[$time]($style)"
