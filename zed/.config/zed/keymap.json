@@ -1,0 +1,10 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "super-b": "workspace::ToggleRightDock",
+      "super-alt-b": "workspace::ToggleLeftDock",
+      "ctrl-`": "workspace::ToggleBottomDock"
+    }
+  }
+]
