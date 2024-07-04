@@ -1,0 +1,102 @@
+#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+version = 2
+final_space = true
+console_title_template = '{{ .Shell }} in {{ .Folder }}'
+auto_upgrade = false # manually upgrade oh-my-posh via homebrew
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    type = 'path'
+    style = 'plain'
+    background = 'transparent'
+    foreground = 'blue'
+    template = '{{ .Path }} '
+
+    [blocks.segments.properties]
+      style = 'full'
+
+  [[blocks.segments]]
+    type = 'git'
+    style = 'plain'
+    foreground = "#9c9c9c"
+    template = '{{ .UpstreamIcon }}{{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <cyan>{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}</>'
+
+    [blocks.segments.properties]
+      branch_icon = '' # do not show branch icon
+      commit_icon = '@'
+      fetch_status = true
+      fetch_upstream_icon = true
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'right'
+  overflow = 'hide'
+
+  [[blocks.segments]]
+    type = 'node'
+    style = 'plain'
+    foreground = '#6cc24a'
+    template = '  {{ .Full }} '
+
+  [[blocks.segments]]
+    type = 'pnpm'
+    style = 'plain'
+    foreground = "#F9AD00"
+    template = ' 󰋁 {{ .Full }} '
+
+  [[blocks.segments]]
+    type = "bun"
+    style = "plain"
+    foreground = "#3C82F6"
+    template = " 🥟 {{ .Full }} "
+
+  [[blocks.segments]]
+    type = "python"
+    style = "plain"
+    foreground = "#100e23"
+    background = "#906cff"
+    template = "  {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }} "
+
+  [[blocks.segments]]
+    type = 'executiontime'
+    style = 'plain'
+    foreground = 'yellow'
+    background = 'transparent'
+    template = '{{ .FormattedMs }}'
+
+    [blocks.segments.properties]
+      threshold = 3000
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    type = 'text'
+    style = 'plain'
+    foreground_templates = [
+      "{{if gt .Code 0}}red{{end}}",
+      "{{if eq .Code 0}}cyan{{end}}",
+    ]
+    background = 'transparent'
+    template = '➜'
+
+[transient_prompt]
+  foreground_templates = [
+    "{{if gt .Code 0}}red{{end}}",
+    "{{if eq .Code 0}}cyan{{end}}",
+  ]
+  background = 'transparent'
+  template = '➜ '
+
+[secondary_prompt]
+  foreground = 'cyan'
+  background = 'transparent'
+  template = '➜➜ '
+
