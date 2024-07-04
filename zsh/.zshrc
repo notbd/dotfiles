@@ -1,33 +1,31 @@
-EDITOR=vim
+# .zshrc
+#
+# Authored by TWZ
+# for my personal zsh setup
+#
+# Inspired by: https://github.com/andrew8088/dotfiles
 
-# aliasing
-alias c=clear
-alias s='source ~/.zshrc'
-alias ls='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always'
-alias la='ls -a'
-alias ll='ls --long'
-alias lla='ls -la'
-lst() {level=${1:-2}; ls --tree --level=$level}
-lat() {level=${1:-2}; la --tree --level=$level}
-llt() {level=${1:-2}; ll --tree --level=$level}
-llat() {level=${1:-2}; lla --tree --level=$level}
-alias rosetta="arch -x86_64 $@"
+source_if_exists () { [[ -r "$1" ]] && source "$1"; }
+
+precmd() {
+  # will run before each prompt, must be cheap or it will slow down prompt
+  source_if_exists ~/.config/zsh/aliases.zsh # load aliases
+}
 
 # node version manager
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-# binaries in pnpm
+# pnpm bin
 export PNPM_HOME="$HOME/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
-# homebrew
+# run homebrew source command again to ensure homebrew bin priority
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# oh-my-posh
+# oh-my-posh (supports transient prompt, but I prefer starship)
 # if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
 #   eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/twz-ohmyposh.toml)"
-#   # eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/tokyonight_storm.omp.json)"
 # fi
 
 # starship
