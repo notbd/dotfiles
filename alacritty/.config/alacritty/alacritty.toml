@@ -29,6 +29,14 @@ bold_italic.style = "BoldItalic"
 
 size = 19
 
+[cursor]
+thickness = 0.24
+blink_timeout = 0
+
+  [cursor.style]
+  shape = "Beam"
+  blinking = "On"
+
 [keyboard]
 bindings = [
   #### ---- Already set up equivalents in .zshrc
