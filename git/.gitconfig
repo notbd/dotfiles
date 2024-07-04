@@ -21,6 +21,7 @@
 	ls = log --oneline
 	ll = log --show-signature
 	lg = log --graph --oneline --all
+	lst = lg
 
 	a = !git config -l | grep alias | cut -c 7-
 
