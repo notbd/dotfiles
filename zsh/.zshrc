@@ -7,6 +7,8 @@
 
 source_if_exists () { [[ -r "$1" ]] && source "$1"; }
 
+source_if_exists ~/.config/zsh/aliases.zsh
+
 precmd() {
   # will run before each prompt, must be cheap or it will slow down prompt
   source_if_exists ~/.config/zsh/aliases.zsh # load aliases
