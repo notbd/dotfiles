@@ -25,7 +25,7 @@ export PATH="$PNPM_HOME:$PATH"
 # run homebrew source command again to ensure homebrew bin priority
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# oh-my-posh (supports transient prompt, but I prefer starship)
+# oh-my-posh
 # if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
 #   eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/twz-oh-my-posh.toml)"
 # fi
