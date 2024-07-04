@@ -1,3 +1,8 @@
+-- wezterm.lua
+-- Configuration file for wezterm
+-- by TWZ
+
+
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
