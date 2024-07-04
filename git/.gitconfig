@@ -9,10 +9,11 @@
   ignorecase = false
 
 [alias]
+  a = !git config -l | grep alias | cut -c 7-
+
   s = !git rev-parse --git-dir > /dev/null 2>&1 && git status || eza --color=always --icons=always
   co = checkout
   br = branch
-
   cm = commit -m
   aas = !git add -A && git status -s
   aac = "!f() { git add -A && git commit -m \"$1\"; }; f"
@@ -23,15 +24,12 @@
   lg = log --graph --oneline --all
   lst = lg
 
-  a = !git config -l | grep alias | cut -c 7-
-
-  # example1 = "!f() { echo $1 ; }; f"
-  # example2 = "!f() { git commit -m \"$1\" ; }; f"
-
 [commit]
   gpgsign = true
+
 [gpg]
   format = ssh
+
 [gpg "ssh"]
   program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
   allowedSignersFile = /Users/zhang13music/.ssh/allowed_signers
