@@ -15,7 +15,7 @@ alias rm=trash
 # eza
 alias l='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always'
 alias ls='eza -1 --color=always --color-scale=all --color-scale-mode=gradient --icons=always'
-alias la='ls -a'
+alias la='l -a'
 alias ll='ls --long --git'
 alias lla='ls -la --git'
 alias lt=lst
