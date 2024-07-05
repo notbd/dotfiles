@@ -6,6 +6,7 @@
 # shorthands
 alias c=clear
 alias s='source ~/.zshrc'
+alias zj=zellij
 
 # substitutes
 alias cd=z
@@ -13,8 +14,8 @@ alias cat=bat
 alias rm=trash
 
 # eza
-alias l='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always'
-alias ls='eza -1 --color=always --color-scale=all --color-scale-mode=gradient --icons=always'
+alias l='eza --icons=always --color=always --color-scale=all --color-scale-mode=gradient'
+alias ls='eza -1 --icons=always --color=always --color-scale=all --color-scale-mode=gradient'
 alias la='l -a'
 alias ll='ls --long --git'
 alias lla='ls -la --git'

@@ -2,6 +2,19 @@
 // Upstream: https://github.com/edeneast/nightfox.nvim/raw/main/extra/zellij/nightfox.kdl
 
 themes {
+  nightfox-alt {
+    bg "#192330"
+    fg "#cdcecf"
+    red "#c94f6d"
+    green "#a3be8c"
+    blue "#719cd6"
+    yellow "#dbc074"
+    magenta "#9d79d6"
+    orange "#f4a261"
+    cyan "#63cdcf"
+    black "#29394f"
+    white "#aeafb0"
+  }
   carbonfox {
     bg "#161616"
     fg "#f2f4f8"

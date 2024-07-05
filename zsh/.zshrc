@@ -3,7 +3,9 @@
 # Authored by TWZ
 # for my personal zsh setup
 #
-# Inspired by: https://github.com/andrew8088/dotfiles
+# H/T:
+#   https://github.com/andrew8088/dotfiles/tree/main/zsh
+#   https://github.com/josean-dev/dev-environment-files/blob/main/.zshrc
 
 source_if_exists () { [[ -r "$1" ]] && source "$1"; }
 
@@ -25,11 +27,6 @@ export PATH="$PNPM_HOME:$PATH"
 # run homebrew source command again to ensure homebrew bin priority
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# oh-my-posh
-# if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-#   eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/twz-oh-my-posh.toml)"
-# fi
-
 # starship
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
   eval "$(starship init zsh)"
@@ -37,39 +34,22 @@ if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
 fi
 
 # zinit
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)" # download zinit if not existed
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh" # source and load zinit
 
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zdharma-continuum/zinit-annex-as-monitor \
-    zdharma-continuum/zinit-annex-bin-gem-node \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
-
-### End of Zinit's installer chunk
-
-# Add in zsh plugins
+# add zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
-# Load completions
-autoload -U compinit && compinit
+# load zsh completions
+autoload -Uz compinit && compinit
+zinit cdreplay -q
 
-# Keybindings
+# zsh keybindings
 WORDCHARS='_' # edit WORDCHARS to enable preferred word stopping behavior
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
@@ -80,7 +60,7 @@ bindkey "^[[1;3D" backward-word
 bindkey "^X\\x7f" backward-kill-line
 bindkey "^X^_" redo
 
-# History
+# zsh history
 HISTSIZE=5000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
@@ -93,17 +73,23 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-# Completion styling
+# zsh completion options
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons=always $realpath'
+
+# zsh completion styling
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons=always --color=always --color-scale=all --color-scale-mode=gradient $realpath'
+zstyle ':fzf-tab:complete:z:*' fzf-preview 'eza -1 --icons=always --color=always --color-scale=all --color-scale-mode=gradient $realpath'
+zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat -n --color=always $realpath'
 
 # -------- fzf --------
 eval "$(fzf --zsh)"
-export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
-export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
+# fzf preview options
+export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
+export FZF_ALT_C_OPTS="--preview 'eza -a --tree --level=2 --icons=always --color=always --color-scale=all --color-scale-mode=gradient {} | head -200'"
+
+# [[preview options for '**' completion]]
 # Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.
 # - You should make sure to pass the rest of the arguments to fzf.
@@ -112,12 +98,26 @@ _fzf_comprun() {
   shift
 
   case "$command" in
-    cd)           fzf --preview 'eza --tree --level=2 --color=always {} | head -200' "$@" ;;
-    export|unset) fzf --preview "eval 'echo $'{}"         "$@" ;;
+    cd|z)         fzf --preview 'eza -a --tree --level=2 --icons=always --color=always --color-scale=all --color-scale-mode=gradient {} | head -200' "$@" ;;
+    export|unset) fzf --preview 'eval "echo $"{}'         "$@" ;;
     ssh)          fzf --preview 'dig {}'                   "$@" ;;
-    *)            fzf --preview "bat -n --color=always --line-range :500 {}" "$@" ;;
+    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
   esac
 }
+
+# fzf find options: use fd instead of the default find command
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+bindkey -r '^[c' # unbind the alt-c keybinding of fzf to avoid conflict with zellij
+
+_fzf_compgen_path() { fd --hidden --exclude .git . "$1"; } # listing path candidates
+_fzf_compgen_dir() { fd --type=d --hidden --exclude .git . "$1";} # listing directory candidates
+
+# fzf-git
+FZF_GIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/fzf-git/fzf-git.git"
+[ ! -d $FZF_GIT_HOME ] && mkdir -p "$(dirname $FZF_GIT_HOME)" # download fzf-git if not existed
+[ ! -d $FZF_GIT_HOME/.git ] && git clone https://github.com/junegunn/fzf-git.sh.git "$FZF_GIT_HOME"
+source "${FZF_GIT_HOME}/fzf-git.sh" # source and load script
 
 # -------- zoxide --------
 eval "$(zoxide init zsh)"
@@ -125,6 +125,3 @@ eval "$(zoxide init zsh)"
 # -------- TheFuck --------
 eval $(thefuck --alias)
 eval $(thefuck --alias fk)
-
-# clear screen
-# clear

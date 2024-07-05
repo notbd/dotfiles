@@ -4,7 +4,7 @@ keybinds {
 
     normal {
         // uncomment this and adjust key if using copy_on_select=false
-        // bind "Alt c" { Copy; }
+        bind "Alt c" { Copy; }
     }
     locked {
         bind "Ctrl g" { SwitchToMode "Normal"; }
@@ -82,7 +82,7 @@ keybinds {
         bind "d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
         // uncomment this and adjust key if using copy_on_select=false
-        // bind "Alt c" { Copy; }
+        bind "Alt c" { Copy; }
     }
     search {
         bind "Ctrl s" { SwitchToMode "Normal"; }
@@ -284,8 +284,7 @@ simplified_ui true
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-// theme "solarized-dark"
-theme "nightfox"
+theme "nightfox-alt"
 
 // The name of the default layout to load on startup
 // Default: "default"
