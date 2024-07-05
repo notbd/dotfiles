@@ -25,6 +25,10 @@
   lg = log --graph --oneline --all
   lst = lg
 
+  undo = reset --soft HEAD^
+  cancel = reset --hard HEAD^
+  onemore = commit -a --amend --no-edit
+
 [commit]
   gpgsign = true
 
