@@ -18,7 +18,8 @@ $git_status\
 $git_metrics\
 $fill\
 $nodejs\
-${custom.pnpm} \
+${custom.pnpm}\
+· \
 $cmd_duration\
 $time\
 $line_break\
