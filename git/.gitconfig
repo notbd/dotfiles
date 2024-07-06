@@ -27,9 +27,12 @@
 
   undo = reset --soft HEAD^
   cancel = reset --hard HEAD^
-  refile-last = commit -a --amend --no-edit
+  
   reword-last = "!f() { git commit --amend -m \"$1\"; }; f"
-  recommit-last = "!f() { git commit --amend -am \"$1\"; }; f"
+  refile-last = commit --amend --no-edit
+  refile-all-last = commit -a --amend --no-edit
+  recommit-last = "!f() { git commit --amend -m \"$1\"; }; f"
+  recommit-all-last = "!f() { git commit --amend -am \"$1\"; }; f"
 
 [commit]
   gpgsign = true
