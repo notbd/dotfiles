@@ -59,6 +59,8 @@ bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 bindkey "^X\\x7f" backward-kill-line
 bindkey "^X^_" redo
+bindkey -r '^L' # unbind the <ctrl+l> keybinding for clear-screen
+bindkey -r '^E' # unbind the <ctrl+e> keybinding for end-of-line
 
 # zsh history
 HISTSIZE=5000
@@ -126,7 +128,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 _fzf_compgen_path() { fd --hidden --exclude .git . "$1"; } # listing path candidates
 _fzf_compgen_dir() { fd --type=d --hidden --exclude .git . "$1";} # listing directory candidates
 
-# fzf-git
+# fzf-git 
+# (There are lots of key conflicts with zellij so I mainly just use <Ctrl+G,H> for hashes and <Ctrl+G,B> for branches)
 FZF_GIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/fzf-git/fzf-git.git"
 [ ! -d $FZF_GIT_HOME ] && mkdir -p "$(dirname $FZF_GIT_HOME)" # download fzf-git if not existed
 [ ! -d $FZF_GIT_HOME/.git ] && git clone https://github.com/junegunn/fzf-git.sh.git "$FZF_GIT_HOME"

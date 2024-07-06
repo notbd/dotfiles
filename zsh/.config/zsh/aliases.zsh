@@ -10,7 +10,6 @@ alias zj=zellij
 
 # substitutes
 alias cd=z
-alias cat=bat
 alias rm=trash
 
 # eza

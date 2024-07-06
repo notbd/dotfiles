@@ -1,5 +1,15 @@
 // If you'd like to override the default keybindings completely, be sure to change "keybinds" to "keybinds clear-defaults=true"
 keybinds {
+    // List of keybinding changes so far:
+    // - Lock mode toggle changed to <Ctrl + l>
+    // - Move mode toggle changed to <Ctrl + e>
+    // - Tmux mode toggle changed to <Ctrl + a>
+    //   - (within tmux mode)
+    //     - Split current pane with a vertical line with <Alt + |>
+    //     - Split current pane with a horizontal line with <Alt + ->
+    // - Copy selected text with <Ctrl + c>
+    // - Unbind <Alt + left/right/up/down> in all modes
+
     unbind "Alt Left" "Alt Right" "Alt Down" "Alt Up" // unbind in all modes
 
     normal {
@@ -7,7 +17,8 @@ keybinds {
         bind "Alt c" { Copy; }
     }
     locked {
-        bind "Ctrl g" { SwitchToMode "Normal"; }
+        unbind "Ctrl g"
+        bind "Ctrl l" { SwitchToMode "Normal"; }
     }
     resize {
         bind "Ctrl n" { SwitchToMode "Normal"; }
@@ -40,7 +51,8 @@ keybinds {
         bind "c" { SwitchToMode "RenamePane"; PaneNameInput 0;}
     }
     move {
-        bind "Ctrl h" { SwitchToMode "Normal"; }
+        unbind "Ctrl h"
+        bind "Ctrl e" { SwitchToMode "Normal"; }
         bind "n" "Tab" { MovePane; }
         bind "p" { MovePaneBackwards; }
         bind "h" "Left" { MovePane "Left"; }
@@ -148,8 +160,8 @@ keybinds {
         bind "x" { CloseFocus; SwitchToMode "Normal"; }
     }
     shared_except "locked" {
-        unbind "Alt h" "Alt l" "Alt j" "Alt k"
-        bind "Ctrl g" { SwitchToMode "Locked"; }
+        unbind "Alt h" "Alt l" "Alt j" "Alt k" "Ctrl g"
+        bind "Ctrl l" { SwitchToMode "Locked"; }
         bind "Ctrl q" { Quit; }
         bind "Alt n" { NewPane; }
         bind "Alt i" { MoveTab "Left"; }
@@ -182,7 +194,8 @@ keybinds {
         bind "Ctrl t" { SwitchToMode "Tab"; }
     }
     shared_except "move" "locked" {
-        bind "Ctrl h" { SwitchToMode "Move"; }
+        unbind "Ctrl h"
+        bind "Ctrl e" { SwitchToMode "Move"; }
     }
     shared_except "tmux" "locked" {
         unbind "Ctrl b"
