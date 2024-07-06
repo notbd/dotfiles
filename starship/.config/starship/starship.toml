@@ -17,8 +17,10 @@ $git_state\
 $git_status\
 $git_metrics\
 $fill\
-$nodejs ${custom.pnpm}\
-$cmd_duration $jobs $time\
+$nodejs\
+${custom.pnpm} \
+$cmd_duration\
+$time\
 $line_break\
 $character"""
 
@@ -60,18 +62,12 @@ detect_files = ['pnpm-lock.yaml']
 command = 'pnpm --version'
 when = 'test -f pnpm-lock.yaml'
 symbol = "󰋁"
-format = '[$symbol $output]($style)'
+format = '[$symbol $output ]($style)'
 style = 'fg:#F9AD00'
 
 [cmd_duration]
-format = "[$duration]($style)"
+format = "[$duration ]($style)"
 style = "yellow"
-
-[jobs]
-symbol = ""
-style = "bold red"
-number_threshold = 1
-format = "[$symbol]($style)"
 
 [time]
 disabled = false
