@@ -12,28 +12,17 @@ source_if_exists () { [[ -r "$1" ]] && source "$1"; }
 source_if_exists ~/.config/zsh/aliases.zsh
 
 precmd() {
-  # will run before each prompt, must be cheap or it will slow down prompt
+  # will run before each command, must be cheap or it will slow down prompt
   source_if_exists ~/.config/zsh/aliases.zsh # load aliases
 }
 
-# node version manager
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-# pnpm bin
-export PNPM_HOME="$HOME/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-
-# run homebrew source command again to ensure homebrew bin priority
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# starship
+# -------- starship --------
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
   eval "$(starship init zsh)"
   export STARSHIP_CONFIG=~/.config/starship/starship.toml
 fi
 
-# zinit
+# -------- zinit --------
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)" # download zinit if not existed
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
@@ -44,6 +33,7 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
+zinit light lukechilds/zsh-nvm
 
 # load zsh completions
 autoload -Uz compinit && compinit
@@ -94,7 +84,7 @@ fzf_preview_command_dir_tree_all='f() { [ -d "$1" ] && eza -1a --tree --icons=al
 # [Preview using "$SOME_COMMAND" + <tab>]
 zstyle ':fzf-tab:complete:*:*' fzf-preview "$fzf_preview_command \$realpath"
 
-# -------- fzf --------
+# ---- fzf
 eval "$(fzf --zsh)"
 
 # fzf keybindings: avoid conflict with zellij
@@ -128,7 +118,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 _fzf_compgen_path() { fd --hidden --exclude .git . "$1"; } # listing path candidates
 _fzf_compgen_dir() { fd --type=d --hidden --exclude .git . "$1";} # listing directory candidates
 
-# fzf-git 
+# -- fzf-git 
 # (There are lots of key conflicts with zellij so I mainly just use <Ctrl+G,H> for hashes and <Ctrl+G,B> for branches)
 FZF_GIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/fzf-git/fzf-git.git"
 [ ! -d $FZF_GIT_HOME ] && mkdir -p "$(dirname $FZF_GIT_HOME)" # download fzf-git if not existed
@@ -140,3 +130,6 @@ eval "$(zoxide init zsh)"
 
 # -------- TheFuck --------
 eval $(thefuck --alias fk)
+
+#### LAST: source bins
+source_if_exists ~/.config/zsh/bins.zsh
