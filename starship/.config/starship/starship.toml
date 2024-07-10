@@ -37,7 +37,7 @@ truncate_to_repo = false
 [git_branch]
 symbol = " "
 format = "[$symbol$branch]($style) "
-style = "bold bright-black"
+style = "bold bright-yellow"
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
