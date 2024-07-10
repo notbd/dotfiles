@@ -1,10 +1,12 @@
 # aliases.zsh
 #
 # Authored by TWZ
-# for my personal zsh aliases
+# my personal zsh aliases
 
 # shorthands
 alias c=clear
+alias co='code .'
+alias pn=pnpm
 alias s='source ~/.zshrc'
 alias zj=zellij
 
