@@ -9,6 +9,9 @@
   ignorecase = false
   pager = delta
 
+[init]
+	defaultBranch = main
+
 [alias]
   a = !git config -l | grep alias | cut -c 7-
 

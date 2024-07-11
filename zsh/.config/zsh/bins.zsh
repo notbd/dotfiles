@@ -1,12 +1,12 @@
-# pnpm bin
+# pnpm bins
 export PNPM_HOME="$HOME/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
-# homebrew bin
+# source homebrew again (already sourced at login shell) and homebrew bins
 if [ -x /opt/homebrew/bin/brew ]; then
-  # remove duplicates
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  # remove duplicates,
   # and ensure homebrew paths are at the front
-  PATH=${PATH//:\/*homebrew\/bin:/:}; PATH=${PATH#/opt/homebrew/bin:}; PATH=${PATH%:/opt/homebrew/bin}
-  PATH=${PATH//:\/*homebrew\/sbin:/:}; PATH=${PATH#/opt/homebrew/sbin:}; PATH=${PATH%:/opt/homebrew/sbin}
+  PATH=$(echo $PATH | sed -E -e 's,(/opt/homebrew/bin|/opt/homebrew/sbin):,,g' -e 's,:(/opt/homebrew/bin|/opt/homebrew/sbin),,g')
   PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 fi

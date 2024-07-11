@@ -9,6 +9,7 @@
 
 source_if_exists () { [[ -r "$1" ]] && source "$1"; }
 
+#### load aliases
 source_if_exists ~/.config/zsh/aliases.zsh
 
 precmd() {
@@ -131,5 +132,5 @@ eval "$(zoxide init zsh)"
 # -------- TheFuck --------
 eval $(thefuck --alias fk)
 
-#### LAST: source bins
+#### LASTLY: source user installed bins
 source_if_exists ~/.config/zsh/bins.zsh

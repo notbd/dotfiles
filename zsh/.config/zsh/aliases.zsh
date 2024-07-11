@@ -5,7 +5,7 @@
 
 # shorthands
 alias c=clear
-alias co='code .'
+alias co=code
 alias pn=pnpm
 alias s='source ~/.zshrc'
 alias zj=zellij
@@ -13,6 +13,8 @@ alias zj=zellij
 # substitutes
 alias cd=z
 alias rm=trash
+alias cat=bat
+alias ccat='\cat'
 
 # eza
 alias l='eza --icons=always --color=always --color-scale=all --color-scale-mode=gradient'
