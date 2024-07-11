@@ -18,8 +18,7 @@ $git_status\
 $git_metrics\
 $fill\
 $nodejs\
-${custom.pnpm}\
-· \
+${custom.pnpm} \
 $cmd_duration\
 $time\
 $line_break\
@@ -72,5 +71,5 @@ style = "yellow"
 
 [time]
 disabled = false
-style = "bright-black"
 format = "[$time]($style)"
+style = "bright-black"
