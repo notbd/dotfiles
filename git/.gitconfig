@@ -37,6 +37,10 @@
   recommit-last = "!f() { git commit --amend -m \"$1\"; }; f"
   recommit-all-last = "!f() { git commit --amend -am \"$1\"; }; f"
 
+  wta=worktree add
+  wtl=worktree list
+  wtr=worktree remove
+
 [commit]
   gpgsign = true
 

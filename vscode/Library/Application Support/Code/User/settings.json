@@ -150,6 +150,7 @@
   "totalTypeScript.hideAllTips": true,
 
   // * Language Specific
+  "typescript.updateImportsOnFileMove.enabled": "always",
   "solidity.compileUsingRemoteVersion": "v0.8.21+commit.d9974bed",
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"
