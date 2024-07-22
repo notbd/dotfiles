@@ -56,6 +56,7 @@
   "files.simpleDialog.enable": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "always",
   "git.untrackedChanges": "separate",
   "workbench.editor.closeOnFileDelete": true,
   "workbench.tree.expandMode": "singleClick",
@@ -91,7 +92,7 @@
   },
 
   // * PRETTIER
-  "prettier.enable": true,
+  "prettier.enable": false,
   "prettier.printWidth": 200,
   "prettier.semi": false,
   "prettier.singleQuote": true,
@@ -126,9 +127,15 @@
     "jsonc",
     "yaml",
     "toml",
-    "astro",
+    "xml",
     "gql",
     "graphql",
+    "astro",
+    "css",
+    "less",
+    "scss",
+    "pcss",
+    "postcss"
   ],
 
   // * Extension configs
@@ -151,6 +158,7 @@
 
   // * Language Specific
   "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
   "solidity.compileUsingRemoteVersion": "v0.8.21+commit.d9974bed",
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"

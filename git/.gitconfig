@@ -20,7 +20,7 @@
   br = branch
   cm = commit -m
   aas = !git add -A && git status -s
-  aac = "!f() { git add -A && git commit -m \"$1\"; }; f"
+  aac = !git add -A && git commit -m
   acp = "!f() { git add -A && git commit -m \"$1\" && git push ; }; f"
 
   ls = log --oneline
@@ -31,11 +31,11 @@
   undo = reset --soft HEAD^
   cancel = reset --hard HEAD^
   
-  reword-last = "!f() { git commit --amend -m \"$1\"; }; f"
+  reword-last = !git reset HEAD && git commit --amend -m
   refile-last = commit --amend --no-edit
-  refile-all-last = commit -a --amend --no-edit
-  recommit-last = "!f() { git commit --amend -m \"$1\"; }; f"
-  recommit-all-last = "!f() { git commit --amend -am \"$1\"; }; f"
+  refile-all-last = !git add -A && git commit --amend --no-edit
+  recommit-last = commit --amend -m
+  recommit-all-last = !git add -A && git commit --amend -m
 
   wta=worktree add
   wtl=worktree list
