@@ -92,7 +92,7 @@
   },
 
   // * PRETTIER
-  "prettier.enable": false,
+  "prettier.enable": true,
   "prettier.printWidth": 200,
   "prettier.semi": false,
   "prettier.singleQuote": true,
@@ -159,6 +159,13 @@
   // * Language Specific
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
+  "[yaml]": {
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.autoIndent": "advanced"
+  },
   "solidity.compileUsingRemoteVersion": "v0.8.21+commit.d9974bed",
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"
@@ -255,5 +262,5 @@
     "*.vue": "$(capture).*.ts, $(capture).*.js, $(capture).story.vue",
     "*.w": "$(capture).*.w, I$(capture).w",
     "*.xaml": "$(capture).xaml.cs"
-  },
+  }
 }
