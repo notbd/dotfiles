@@ -5,10 +5,11 @@
 
 # shorthands
 alias c=clear
-alias co=code
+alias cc='code .'
 alias pn=pnpm
 alias s='source ~/.zshrc'
 alias zj=zellij
+alias za='zellij attach'
 
 # substitutes
 alias cd=z
@@ -19,14 +20,15 @@ alias ccat='\cat'
 # eza
 alias l='eza --icons=always --color=always --color-scale=all --color-scale-mode=gradient'
 alias ls='eza -1 --icons=always --color=always --color-scale=all --color-scale-mode=gradient'
-alias la='l -a'
 alias ll='ls --long --git'
-alias lla='ls -la --git'
+alias lsa='l -a'
+alias la='ls -la --git'
+
 alias lt=lst
 alias lst='treeify ls'
-alias lat='treeify la'
 alias llt='treeify ll'
-alias llat='treeify lla'
+alias lsat='treeify lsa'
+alias lat='treeify la'
 
 # other utilities
 alias trim="awk '{\$1=\$1;print}'"

@@ -49,7 +49,7 @@
 
 [gpg "ssh"]
   program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-  allowedSignersFile = /Users/zhang13music/.ssh/allowed_signers
+  allowedSignersFile = ~/.ssh/allowed_signers
 
 [interactive]
   diffFilter = delta --color-only
