@@ -27,7 +27,7 @@ italic.style = "MediumItalic"
 bold_italic.family = "JetBrainsMono Nerd Font Propo"
 bold_italic.style = "BoldItalic"
 
-size = 19
+size = 17
 
 [cursor]
 thickness = 0.24
