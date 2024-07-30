@@ -132,5 +132,8 @@ eval "$(zoxide init zsh)"
 # -------- TheFuck --------
 eval $(thefuck --alias fk)
 
+# -------- 1Password --------
+export SSH_AUTH_SOCK=~/.1password/agent.sock
+
 #### LASTLY: source user installed bins
 source_if_exists ~/.config/zsh/bins.zsh

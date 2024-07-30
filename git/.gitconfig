@@ -10,7 +10,7 @@
   pager = delta
 
 [init]
-	defaultBranch = main
+  defaultBranch = main
 
 [alias]
   a = !git config -l | grep alias | cut -c 7-
