@@ -26,3 +26,5 @@ _darcs
 #### -------- Below is user customization
 
 \.DS_Store
+^/README*
+^/LICENSE*
