@@ -1,3 +1,7 @@
 # cSpell
 
-Custom configuration for cSpell. The global dictionary is set to be ignored for privacy, and the content should be synced manually.
+Custom configuration for cSpell.
+
+The global dictionary is ignored for privacy and should be synced manually.
+
+Global dictionary path: `~/.config/cSpell/global-dictionary.txt`
