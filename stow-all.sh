@@ -2,6 +2,7 @@
 
 stow_dirs=(
   "alacritty"
+  "cSpell"
   "git"
   "oh-my-posh"
   "ssh"

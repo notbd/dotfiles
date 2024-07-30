@@ -16,13 +16,13 @@
   "window.commandCenter": true,
   "window.dialogStyle": "custom",
   "window.zoomLevel": -1,
-  "workbench.colorTheme": "poimandres",
+  "workbench.colorTheme": "poimandres-noitalics",
   "workbench.editor.tabActionLocation": "left",
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.fontAliasing": "antialiased",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.list.smoothScrolling": true,
-  "workbench.preferredDarkColorTheme": "poimandres",
+  "workbench.preferredDarkColorTheme": "poimandres-noitalics",
   "workbench.preferredLightColorTheme": "Vitesse Light",
   "workbench.productIconTheme": "icons-carbon",
   "workbench.sideBar.location": "right",
@@ -151,6 +151,14 @@
   },
   "cSpell.allowCompoundWords": true,
   "cSpell.language": "en,en-US",
+  "cSpell.customDictionaries": {
+    "global": {
+      "name": "Global Dictionary",
+      "path": "~/.config/cSpell/global-dictionary.txt",
+      "description": "A global dictionary for cSpell",
+      "addWords": true
+    }
+  },
   "css.lint.hexColorLength": "ignore",
   "iconify.annotations": true,
   "iconify.inplace": true,
