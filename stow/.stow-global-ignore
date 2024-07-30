@@ -25,6 +25,10 @@ _darcs
 #### -------- Above is copied from default-ignore-list (https://github.com/aspiers/stow/blob/master/default-ignore-list)
 #### -------- Below is user customization
 
+# .DS_Store
 \.DS_Store
+
+# include READMEs and LICENSEs that do not have file extentsion
+# note: will only ignore the root of each stow directory, not deeper down.
 ^/README*
 ^/LICENSE*
