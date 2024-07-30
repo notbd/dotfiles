@@ -2,8 +2,8 @@
   // * VISUALS
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.fontFamily": "JetBrains Mono, Input Mono, Geist Mono, SF Mono, monospace",
-  "editor.fontLigatures": "'ss03'",
+  "editor.fontFamily": "Input Mono, JetBrains Mono, Geist Mono, SF Mono, monospace",
+  // "editor.fontLigatures": "'ss01'",
   "editor.fontSize": 19,
   "editor.fontWeight": "400",
   "editor.guides.bracketPairs": "active",
@@ -137,6 +137,10 @@
     "pcss",
     "postcss"
   ],
+
+  // * Other linting
+  "markdownlint.config": {
+  },
 
   // * Extension configs
   "extensions.ignoreRecommendations": true,
