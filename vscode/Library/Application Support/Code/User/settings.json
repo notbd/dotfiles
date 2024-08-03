@@ -4,7 +4,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.fontFamily": "Input Mono, JetBrains Mono, Geist Mono, SF Mono, monospace",
   // "editor.fontLigatures": "'ss01'",
-  "editor.fontSize": 19,
+  "editor.fontSize": 18,
   "editor.fontWeight": "400",
   "editor.guides.bracketPairs": "active",
   "editor.lineHeight": 0,
@@ -173,6 +173,9 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "[shellscript]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[mdx]": {
+    "editor.wordWrap": "on",
   },
   "[yaml]": {
     "editor.autoIndent": "advanced",
