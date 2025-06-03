@@ -59,7 +59,8 @@ style = "fg:#6cc24a"
 
 [custom.pnpm]
 detect_files = ['pnpm-lock.yaml']
-command = 'pnpm --version'
+# command = 'pnpm --version' # this command times out sometimes
+command = 'jq -r .version "$(find /opt/homebrew/Cellar/pnpm/ -type f -path "*/libexec/lib/node_modules/pnpm/package.json" 2>/dev/null | sort -V | tail -1)"'
 when = 'test -f pnpm-lock.yaml'
 symbol = "󰋁"
 format = '[$symbol $output ]($style)'

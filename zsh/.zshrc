@@ -44,10 +44,10 @@ zinit cdreplay -q
 WORDCHARS='_' # edit WORDCHARS to enable preferred word stopping behavior
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
-bindkey "^[[1;9C" end-of-line
 bindkey "^[[1;9D" beginning-of-line
-bindkey "^[[1;3C" forward-word
+bindkey "^[[1;9C" end-of-line
 bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
 bindkey "^X\\x7f" backward-kill-line
 bindkey "^X^_" redo
 bindkey -r '^L' # unbind the <ctrl+l> keybinding for clear-screen
