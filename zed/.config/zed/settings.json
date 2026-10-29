@@ -7,31 +7,41 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "outline_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "buffer_font_family": "Berkeley Mono",
   "tab_size": 2,
   "ui_font_size": 16,
   "buffer_font_size": 16,
   "preferred_line_length": 120,
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "project_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "notification_panel": {
-    "button": false
+    "button": false,
   },
   "collaboration_panel": {
-    "button": false
+    "dock": "left",
+    "button": false,
   },
-  "assistant": {
-    "version": "2",
-    "button": false
+  "agent": {
+    "dock": "right",
+    "button": false,
   },
-  "chat_panel": {
-    "button": false
+  "buffer_font_features": {
+    "calt": false,
+    "liga": false,
+    "dlig": false,
   },
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font Mono"
-  }
+    "font_family": "JetBrainsMono Nerd Font Mono",
+  },
 }
