@@ -6,7 +6,6 @@
   signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAE6mdsKlaqk/n17bFP0+LmbilsWVvPa2gHF0PNAQaff
 
 [core]
-  ignorecase = false
   pager = delta
 
 [init]
@@ -26,20 +25,19 @@
   ls = log --oneline
   ll = log --show-signature
   lg = log --graph --oneline --all
-  lst = lg
 
   undo = reset --soft HEAD^
   cancel = reset --hard HEAD^
-  
+
   reword-last = !git reset HEAD && git commit --amend -m
   refile-last = commit --amend --no-edit
   refile-all-last = !git add -A && git commit --amend --no-edit
   recommit-last = commit --amend -m
   recommit-all-last = !git add -A && git commit --amend -m
 
-  wta=worktree add
-  wtl=worktree list
-  wtr=worktree remove
+  wta = worktree add
+  wtl = worktree list
+  wtr = worktree remove
 
 [commit]
   gpgsign = true
@@ -63,3 +61,10 @@
 
 [diff]
   colorMoved = default
+
+[credential "https://github.com"]
+  helper =
+  helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+  helper =
+  helper = !/opt/homebrew/bin/gh auth git-credential
