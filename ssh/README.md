@@ -1,3 +1,0 @@
-# SSH
-
-Configurations for SSH.
