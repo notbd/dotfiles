@@ -1,0 +1,76 @@
+# Brewfile.extra - optional apps, reviewed 2026-10-19; none is needed on day one.
+# All:      brew bundle --file=~/.dotfiles/Brewfile.extra
+# One:      brew install [--cask] <name>   (App Store lines: mas install <id>)
+
+tap "abue-ammar/tinycast"
+
+# -------- command line --------
+brew "aria2"
+brew "btop"
+brew "cmatrix"
+brew "cowsay"
+brew "fortune"
+brew "mas"           # installs the App Store lines below
+brew "swiftformat"
+brew "swiftlint"
+brew "tlrc"
+
+# -------- browsers --------
+cask "arc"           # discontinued upstream; Homebrew marks it deprecated
+cask "thebrowsercompany-dia"
+
+# -------- utilities --------
+cask "abue-ammar/tinycast/tinycast"
+cask "aldente"
+cask "alfred"
+cask "betterdisplay"
+cask "bettertouchtool"
+cask "cleanshot"
+cask "istat-menus@6" # license is for v6
+cask "itsycal"
+cask "lookaway"
+cask "maczip"
+cask "mole-app"
+cask "tailscale-app"
+
+# -------- terminals --------
+cask "kaku"
+
+# -------- design and dev tools --------
+cask "apparency"
+cask "metaimage"
+cask "pictogram"
+
+# -------- office --------
+cask "pdf-expert"
+cask "simplenote"
+cask "windows-app"
+
+# -------- media --------
+cask "downie"
+cask "iina"
+cask "imageoptim"
+cask "movist-pro"
+cask "music-decoy"
+cask "neteasemusic"
+cask "transmission"
+cask "webtorrent"
+
+# -------- fonts --------
+cask "font-bungee"
+cask "font-geist-mono-nerd-font"
+cask "font-inter"
+
+# -------- Mac App Store --------
+mas "1Password for Safari", id: 1569813296
+mas "Aurora Dictionary", id: 1154746981
+mas "Drafts", id: 1435957248
+mas "Dropover", id: 1355679052
+mas "moomoo", id: 1482713641
+mas "RunCatNeo", id: 6757801838
+mas "Speedtest", id: 1153157709
+mas "Xcode", id: 497799835
+
+# -------- by hand --------
+# FotMob: iPhone/iPad app, from the App Store app
+# Muse: Homebrew cask disabled (needs a signed download URL); download from the vendor

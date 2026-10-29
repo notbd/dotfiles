@@ -1,5 +1,4 @@
-# .DS_Store
-**/.DS_Store
+.DS_Store
 
-# cSpell dict
-**/cspell/**/**dictionary**
+# private (personal folders, LaunchAgent names); setup-new-mac.sh copies it from the old Mac
+migrate/
