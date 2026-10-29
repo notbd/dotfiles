@@ -7,133 +7,96 @@
 #   https://github.com/andrew8088/dotfiles/tree/main/zsh
 #   https://github.com/josean-dev/dev-environment-files/blob/main/.zshrc
 
-source_if_exists () { [[ -r "$1" ]] && source "$1"; }
+# -------- basics --------
+typeset -U path fpath          # no duplicates; later prepends move an entry to the front
+bindkey -e                     # emacs keys, even when $EDITOR/$VISUAL mention vi
+setopt interactive_comments    # `cmd # note` passes no `#` arguments
+export EDITOR="zed --wait"
 
-#### load aliases
-source_if_exists ~/.config/zsh/aliases.zsh
+# -------- PATH --------
+# .zprofile runs `brew shellenv` for login shells; shells started by apps may lack it
+if [[ -d /opt/homebrew ]]; then
+  path=(/opt/homebrew/{bin,sbin} $path)
+  fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+fi
+export PNPM_HOME="$HOME/Library/pnpm"
+path=("$HOME/.local/bin" $path "$PNPM_HOME/bin")   # pnpm global bins; Homebrew's pnpm itself comes first
 
-precmd() {
-  # will run before each command, must be cheap or it will slow down prompt
-  source_if_exists ~/.config/zsh/aliases.zsh # load aliases
-}
+# -------- aliases --------
+source ~/.config/zsh/aliases.zsh
 
-# -------- starship --------
-if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  eval "$(starship init zsh)"
-  export STARSHIP_CONFIG=~/.config/starship/starship.toml
+# -------- plugins and completion (zinit) --------
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+[[ -d $ZINIT_HOME/.git ]] || git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+if [[ -r $ZINIT_HOME/zinit.zsh ]]; then      # skipped if the first clone failed (offline)
+  typeset -gA ZINIT; ZINIT[NO_ALIASES]=1     # zinit's own `zi` alias would hide zoxide's `zi`
+  source "$ZINIT_HOME/zinit.zsh"
+  # order matters: completions -> compinit -> fzf-tab -> autosuggestions -> syntax-highlighting
+  zinit light zsh-users/zsh-completions
+  autoload -Uz compinit && compinit
+  zinit light Aloxaf/fzf-tab
+  zinit light zsh-users/zsh-autosuggestions
+  zinit light zsh-users/zsh-syntax-highlighting
+else
+  autoload -Uz compinit && compinit
 fi
 
-# -------- zinit --------
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)" # download zinit if not existed
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh" # source and load zinit
-
-# add zsh plugins
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
-zinit light lukechilds/zsh-nvm
-
-# load zsh completions
-autoload -Uz compinit && compinit
-zinit cdreplay -q
-
-# zsh keybindings
-WORDCHARS='_' # edit WORDCHARS to enable preferred word stopping behavior
-bindkey "^[[A" history-search-backward
-bindkey "^[[B" history-search-forward
-bindkey "^[[1;9D" beginning-of-line
-bindkey "^[[1;9C" end-of-line
-bindkey "^[[1;3D" backward-word
-bindkey "^[[1;3C" forward-word
-bindkey "^X\\x7f" backward-kill-line
-bindkey "^X^_" redo
-bindkey -r '^L' # unbind the <ctrl+l> keybinding for clear-screen
-bindkey -r '^E' # unbind the <ctrl+e> keybinding for end-of-line
-
-# zsh history
-HISTSIZE=5000
-HISTFILE=~/.zsh_history
-SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
-
-# zsh completion options
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' menu no
 
-# pre-define fzf default preview function
-#
-#   - fzf_preview_command: preview directories using `eza -1` and files using `bat`
-#   - fzf_preview_command_dir_tree: preview directories using `eza --tree` and files using `bat`
-#   - fzf_preview_command_dir_all: preview directories using `eza -1a` and files using `bat`
-#   - fzf_preview_command_dir_tree_all: preview directories using `eza -1a --tree` and files using `bat`
-fzf_preview_command='f() { [ -d "$1" ] && eza -1 --icons=always --color=always --color-scale=all --color-scale-mode=gradient "$1" | head -200 || bat -n --color=always "$1"; }; f'
-fzf_preview_command_dir_tree='f() { [ -d "$1" ] && eza --tree --icons=always --color=always --color-scale=all --color-scale-mode=gradient "$1" | head -200 || bat -n --color=always "$1"; }; f'
-fzf_preview_command_dir_all='f() { [ -d "$1" ] && eza -1a --icons=always --color=always --color-scale=all --color-scale-mode=gradient "$1" | head -200 || bat -n --color=always "$1"; }; f'
-fzf_preview_command_dir_tree_all='f() { [ -d "$1" ] && eza -1a --tree --icons=always --color=always --color-scale=all --color-scale-mode=gradient "$1" | head -200 || bat -n --color=always "$1"; }; f'
+# preview a directory listing or a file; anything else (subcommands, options) gets no preview
+_preview='f() { if [[ -d $1 ]]; then eza -1a --icons=always --color=always "$1" | head -200; elif [[ -f $1 ]]; then bat -n --color=always "$1"; fi; }; f'
+zstyle ':fzf-tab:complete:*:*' fzf-preview "$_preview \$realpath"
 
-# zsh completion styling
-# [Preview using "$SOME_COMMAND" + <tab>]
-zstyle ':fzf-tab:complete:*:*' fzf-preview "$fzf_preview_command \$realpath"
+# -------- fzf --------
+export FZF_DEFAULT_COMMAND="fd --hidden --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview '$_preview {}'"
+(( $+commands[fzf] )) && FZF_ALT_C_COMMAND= source <(fzf --zsh)   # empty ALT_C_COMMAND: no Alt-C widget
+bindkey '^F^F' fzf-file-widget               # Ctrl-F Ctrl-F: file picker (same as Ctrl-T)
 
-# ---- fzf
-eval "$(fzf --zsh)"
-
-# fzf keybindings: avoid conflict with zellij
-bindkey -r '^[c' # unbind the <alt+c> keybinding
-bindkey '^F^F' fzf-file-widget # add <ctrl+f> - <ctrl+f> binding to fzf-file-widget
-
-# fzf preview options
-# [Preview using <ctrl+f> - <ctrl+f>]
-export FZF_CTRL_T_OPTS="--preview '$fzf_preview_command_dir_all {}'"
-# export FZF_ALT_C_OPTS="$FZF_CTRL_T_OPTS" # disabled since conflict with zellij copy
-
-# [Preview using `"$SOME_COMMAND" **` + <tab>]
-# Advanced customization of fzf options via _fzf_comprun function
-# - The first argument to the function is the name of the command.
-# - You should make sure to pass the rest of the arguments to fzf.
-_fzf_comprun() {
-  local command=$1
-  shift
-
+_fzf_compgen_path() { fd --hidden --exclude .git . "$1"; }
+_fzf_compgen_dir()  { fd --type=d --hidden --exclude .git . "$1"; }
+_fzf_comprun() {                             # previews for `<cmd> **<Tab>`
+  local command=$1; shift
   case "$command" in
-    export|unset) fzf --preview 'eval "echo $"{}'         "$@" ;;
-    ssh)          fzf --preview 'dig {}'                   "$@" ;;
-    *)            fzf --preview "$fzf_preview_command_dir_tree_all {}" "$@" ;;
+    export|unset) fzf --preview 'eval "echo \$"{}' "$@" ;;
+    ssh)          fzf --preview 'dig {}' "$@" ;;
+    *)            fzf --preview "$_preview {}" "$@" ;;
   esac
 }
 
-# fzf find options: use fd instead of the default find command
-export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# -------- fzf-git (Ctrl-G Ctrl-H hashes, Ctrl-G Ctrl-B branches, ...) --------
+FZF_GIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/fzf-git/fzf-git.git"
+[[ -d $FZF_GIT_HOME/.git ]] || git clone https://github.com/junegunn/fzf-git.sh.git "$FZF_GIT_HOME"
+# sourced directly, not through a helper: fzf-git.sh runs as a command when $# == 1
+[[ -r $FZF_GIT_HOME/fzf-git.sh ]] && source "$FZF_GIT_HOME/fzf-git.sh"
 
-_fzf_compgen_path() { fd --hidden --exclude .git . "$1"; } # listing path candidates
-_fzf_compgen_dir() { fd --type=d --hidden --exclude .git . "$1";} # listing directory candidates
+# -------- key bindings (Ghostty sends these; see .config/ghostty/config) --------
+WORDCHARS='_'                       # Option+Left/Right/Backspace stop at / . - ; only _ joins words
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+bindkey '^[[1;9D' beginning-of-line # Cmd+Left
+bindkey '^[[1;9C' end-of-line       # Cmd+Right
+bindkey '^[[1;3D' backward-word     # Option+Left
+bindkey '^[[1;3C' forward-word      # Option+Right
+bindkey '^U' backward-kill-line     # Cmd+Backspace
+bindkey '^X^_' redo                 # Cmd+Shift+Z
 
-# -- fzf-git 
-# (There are lots of key conflicts with zellij so I mainly just use <Ctrl+G,H> for hashes and <Ctrl+G,B> for branches)
-FZF_GIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/fzf-git/fzf-git.git"
-[ ! -d $FZF_GIT_HOME ] && mkdir -p "$(dirname $FZF_GIT_HOME)" # download fzf-git if not existed
-[ ! -d $FZF_GIT_HOME/.git ] && git clone https://github.com/junegunn/fzf-git.sh.git "$FZF_GIT_HOME"
-source "${FZF_GIT_HOME}/fzf-git.sh" # source and load script
+# -------- history --------
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=$HISTSIZE
+setopt share_history hist_ignore_space hist_ignore_all_dups hist_save_no_dups hist_find_no_dups
 
-# -------- zoxide --------
-eval "$(zoxide init zsh)"
+# -------- tools --------
+(( $+commands[fnm] )) && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
+export SSH_AUTH_SOCK=~/.1password/agent.sock   # 1Password SSH agent (also in ~/.ssh/config)
+export HOMEBREW_BUNDLE_FILE=~/.dotfiles/Brewfile   # `brew bundle add <name>` records new installs here
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"   # zoxide asks to be initialised last among tools
 
-# -------- TheFuck --------
-eval $(thefuck --alias fk)
-
-# -------- 1Password --------
-export SSH_AUTH_SOCK=~/.1password/agent.sock
-
-#### LASTLY: source user installed bins
-source_if_exists ~/.config/zsh/bins.zsh
+# -------- prompt --------
+if (( $+commands[starship] )) && [[ $TERM_PROGRAM != Apple_Terminal ]]; then   # Apple Terminal has no Nerd Font
+  export STARSHIP_CONFIG=~/.config/starship/starship.toml
+  eval "$(starship init zsh)"
+fi
