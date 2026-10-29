@@ -1,0 +1,68 @@
+# Ghostty - main terminal. List every option: ghostty +show-config --default --docs
+
+font-family = "JetBrainsMono Nerd Font Propo"
+font-style = Medium
+font-style-bold = Bold
+font-style-italic = Medium Italic
+font-style-bold-italic = Bold Italic
+font-size = 17
+
+window-padding-x = 8
+window-padding-y = 8
+macos-titlebar-style = hidden
+background-opacity = 0.7
+background-blur = true
+macos-option-as-alt = true
+
+cursor-style = bar
+cursor-style-blink = true
+
+# over ssh, TERM=xterm-256color: most servers have no xterm-ghostty entry
+shell-integration-features = ssh-env
+
+# Nightfox-based colors
+background = #011423
+foreground = #cdcecf
+palette = 0=#393b44
+palette = 1=#c94f6d
+palette = 2=#81b29a
+palette = 3=#dbc074
+palette = 4=#719cd6
+palette = 5=#9d79d6
+palette = 6=#63cdcf
+palette = 7=#dfdfe0
+palette = 8=#575860
+palette = 9=#d16983
+palette = 10=#8ebaa4
+palette = 11=#e0c989
+palette = 12=#86abdc
+palette = 13=#baa1e2
+palette = 14=#7ad5d6
+palette = 15=#e4e4e5
+
+# Keys send the xterm sequences .zshrc binds. Ghostty's own defaults (Ctrl-A, Esc b) would be
+# caught by zellij, where Ctrl-A enters tmux mode. Comments must sit on their own line:
+# after a value they become part of it.
+
+# Cmd+Left: line start
+keybind = super+arrow_left=text:\x1b[1;9D
+# Cmd+Right: line end
+keybind = super+arrow_right=text:\x1b[1;9C
+# Option+Left: word left
+keybind = alt+arrow_left=text:\x1b[1;3D
+# Option+Right: word right
+keybind = alt+arrow_right=text:\x1b[1;3C
+# Cmd+Backspace: delete to line start (^U)
+keybind = super+backspace=text:\x15
+# Cmd+Delete: delete to line end (^K)
+keybind = super+delete=text:\x0b
+# Option+Backspace: delete word left
+keybind = alt+backspace=text:\x1b\x08
+# Option+Delete: delete word right (Esc d)
+keybind = alt+delete=text:\x1bd
+# Cmd+Z: undo (^_), instead of Ghostty's reopen-tab
+keybind = super+z=text:\x1f
+# Cmd+Shift+Z: redo (^X^_, bound in .zshrc)
+keybind = super+shift+z=text:\x18\x1f
+# Shift+Return: newline in Claude Code / Codex prompts
+keybind = shift+enter=text:\x1b\r
