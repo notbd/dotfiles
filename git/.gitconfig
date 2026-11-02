@@ -62,6 +62,14 @@
 [diff]
   colorMoved = default
 
+# My own repos: fetch over HTTPS with the read-only token in ~/.config/gh (no Touch ID),
+# push stays on SSH (Touch ID). Other owners' repos are left as they are.
+[url "https://github.com/notbd/"]
+  insteadOf = git@github.com:notbd/
+# Deliberately the shortest prefix: the agents' longer pushInsteadOf wins, so they push over HTTPS
+[url "git@github.com"]
+  pushInsteadOf = git@github.com
+
 [credential "https://github.com"]
   helper =
   helper = !/opt/homebrew/bin/gh auth git-credential

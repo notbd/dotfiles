@@ -36,17 +36,24 @@ Not packages: `Brewfile` and `Brewfile.extra`; `python/`, frozen requirements fo
 
 ## Coding agents
 
-Claude Code and Codex have their own Git identity, so they sign, push and run `gh` without Touch ID, while my own terminal still goes through 1Password. They are told apart by environment variables that only the agents set. The agent rules live in `~/.claude/docs/code-repo.md`.
+Three Git identities, picked by who runs the command. Claude Code and Codex sign, push and run `gh` with their own key and token, no Touch ID. Everything else (the Claude app and T3 Code in the background, my own `git pull`) reads my repos with a read-only token, no Touch ID. My pushes, signatures and `gh` commands still go through 1Password. The agents are told apart by environment variables that only they set. The agent rules live in `~/.claude/docs/code-repo.md`.
 
 | Piece | Where | Notes |
 |---|---|---|
 | Signing key | `~/.ssh/agent_signing`, `.pub` | A plain key file, not in 1Password. The public key is in `allowed_signers` and on GitHub as the signing key "Agent Signing Key - Joan" |
 | GitHub token | `~/.config/gh-agent/hosts.yml` | Fine-grained token "agent - Joan": all repositories; Actions, Contents, Issues, Pull requests, Variables and Workflows read and write; Code quality, Code scanning alerts, Commit statuses, Dependabot alerts, Deployments and Metadata read-only |
-| Variables | `env` in `~/.claude/settings.json`, `[shell_environment_policy.set]` in `~/.codex/config.toml` | `GIT_CONFIG_*` switch the signing key and program and rewrite `git@github.com:` and `ssh://git@github.com/` to HTTPS; `GH_CONFIG_DIR` points `gh` and the HTTPS credential helper at the token, and the two `Match exec` blocks at the top of `.ssh/config` keep the agents' ssh, and any ssh without a terminal (such as the Claude app's background `git fetch`), away from 1Password |
+| Variables | `env` in `~/.claude/settings.json`, `[shell_environment_policy.set]` in `~/.codex/config.toml` | `GIT_CONFIG_*` switch the signing key and program and send fetches and pushes to `git@github.com:` and `ssh://git@github.com/` over HTTPS; `GH_CONFIG_DIR` points `gh` and the HTTPS credential helper at the token, and the `Match exec` block at the top of `.ssh/config` keeps the agents' ssh away from 1Password |
+| Read-only token | `~/.config/gh/hosts.yml` | Fine-grained token "read-only - Joan": all repositories; Actions, Code quality, Code scanning alerts, Commit statuses, Contents, Dependabot alerts, Deployments, Issues, Metadata and Pull requests read-only. `.gitconfig` sends fetches from `git@github.com:notbd/` over HTTPS, where `gh auth git-credential` hands out this token; its `pushInsteadOf = git@github.com` keeps my pushes on SSH and is shorter than the agents' rule on purpose, so theirs wins. Other owners' repos stay on SSH: GitHub has no token that reads them read-only |
 | My `gh` | 1Password item "GitHub CLI Token" | Classic token "gh CLI via 1Password - Joan", loaded by the 1Password shell plugin (`~/.config/op/`). `.zshrc` skips the plugin in agent shells. Keep the macOS keychain free of a gh token: with an old token left there (tested 2026-11-01), the agents' `gh` used it instead of the one in `gh-agent` |
-| Check | `~/.claude/hooks/agent-git-check.py` | Runs at session start and speaks up only when something drifted or the token expires within 30 days |
+| Check | `~/.claude/hooks/agent-git-check.py` | Runs at session start, runs real `git` and `ssh -G` commands for each identity, and speaks up only when something drifted or a token expires within 30 days |
 
-Both tokens expire on 2027-11-01. To renew, press Regenerate on each token's GitHub page, paste the classic one into the 1Password item, and log the agent one in with `pbpaste | GH_CONFIG_DIR=~/.config/gh-agent command gh auth login -h github.com --with-token --insecure-storage` (`command` skips the 1Password plugin, whose `GH_TOKEN` makes `gh` refuse to log in). `migrate.sh` copies the key, the token and the plugin config to a new Mac; `~/.claude` and `~/.codex` come along with the variables.
+All three tokens expire on 2027-11-01. To renew, press Regenerate on each token's GitHub page, then:
+
+- classic: paste it into the 1Password item
+- agent: `pbpaste | GH_CONFIG_DIR=~/.config/gh-agent command gh auth login -h github.com --with-token --insecure-storage`
+- read-only: `pbpaste | command gh auth login -h github.com --with-token --insecure-storage`
+
+The last two differ only in `GH_CONFIG_DIR`; the check warns if both directories end up with the same token. `command` skips the 1Password plugin, whose `GH_TOKEN` makes `gh` refuse to log in, and `--insecure-storage` keeps the token out of the keychain entry every config directory shares. `migrate.sh` copies the key, both tokens and the plugin config to a new Mac; `~/.claude` and `~/.codex` come along with the variables.
 
 ## License
 
