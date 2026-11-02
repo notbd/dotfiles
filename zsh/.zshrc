@@ -92,6 +92,8 @@ setopt share_history hist_ignore_space hist_ignore_all_dups hist_save_no_dups hi
 # -------- tools --------
 (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 export SSH_AUTH_SOCK=~/.1password/agent.sock   # 1Password SSH agent (also in ~/.ssh/config)
+# 1Password shell plugins: gh gets its token from 1Password (Touch ID); agent shells skip it and use ~/.config/gh-agent
+[[ -f ~/.config/op/plugins.sh && -z $CLAUDECODE && -z $GH_CONFIG_DIR ]] && source ~/.config/op/plugins.sh
 export HOMEBREW_BUNDLE_FILE=~/.dotfiles/Brewfile   # `brew bundle add <name>` records new installs here
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"   # zoxide asks to be initialised last among tools
 
