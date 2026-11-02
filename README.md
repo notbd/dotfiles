@@ -42,7 +42,7 @@ Three Git identities, picked by who runs the command. Claude Code and Codex sign
 |---|---|---|
 | Signing key | `~/.ssh/agent_signing`, `.pub` | A plain key file, not in 1Password. The public key is in `allowed_signers` and on GitHub as the signing key "Agent Signing Key - Joan" |
 | GitHub token | `~/.config/gh-agent/hosts.yml` | Fine-grained token "agent - Joan": all repositories; Actions, Contents, Issues, Pull requests, Variables and Workflows read and write; Code quality, Code scanning alerts, Commit statuses, Dependabot alerts, Deployments and Metadata read-only |
-| Variables | `env` in `~/.claude/settings.json`, `[shell_environment_policy.set]` in `~/.codex/config.toml` | `GIT_CONFIG_*` switch the signing key and program and send fetches and pushes to `git@github.com:` and `ssh://git@github.com/` over HTTPS; `GH_CONFIG_DIR` points `gh` and the HTTPS credential helper at the token, and the `Match exec` block at the top of `.ssh/config` keeps the agents' ssh away from 1Password |
+| Variables | `env` in `~/.claude/settings.json`; `~/.claude/hooks/harness-sync.py` copies them into `[shell_environment_policy.set]` in `~/.codex/config.toml` at every session start | `GIT_CONFIG_*` switch the signing key and program and send fetches and pushes to `git@github.com:` and `ssh://git@github.com/` over HTTPS; `GH_CONFIG_DIR` points `gh` and the HTTPS credential helper at the token, and the `Match exec` block at the top of `.ssh/config` keeps the agents' ssh away from 1Password |
 | Read-only token | `~/.config/gh/hosts.yml` | Fine-grained token "read-only - Joan": all repositories; Actions, Code quality, Code scanning alerts, Commit statuses, Contents, Dependabot alerts, Deployments, Issues, Metadata and Pull requests read-only. `.gitconfig` sends fetches from `git@github.com:notbd/` over HTTPS, where `gh auth git-credential` hands out this token; its `pushInsteadOf = git@github.com` keeps my pushes on SSH and is shorter than the agents' rule on purpose, so theirs wins. Other owners' repos stay on SSH: GitHub has no token that reads them read-only |
 | My `gh` | 1Password item "GitHub CLI Token" | Classic token "gh CLI via 1Password - Joan", loaded by the 1Password shell plugin (`~/.config/op/`). `.zshrc` skips the plugin in agent shells. Keep the macOS keychain free of a gh token: with an old token left there (tested 2026-11-01), the agents' `gh` used it instead of the one in `gh-agent` |
 | Check | `~/.claude/hooks/agent-git-check.py` | Runs at session start, runs real `git` and `ssh -G` commands for each identity, and speaks up only when something drifted or a token expires within 30 days |
@@ -54,6 +54,21 @@ All three tokens expire on 2027-11-01. To renew, press Regenerate on each token'
 - read-only: `pbpaste | command gh auth login -h github.com --with-token --insecure-storage`
 
 The last two differ only in `GH_CONFIG_DIR`; the check warns if both directories end up with the same token. `command` skips the 1Password plugin, whose `GH_TOKEN` makes `gh` refuse to log in, and `--insecure-storage` keeps the token out of the keychain entry every config directory shares. `migrate.sh` copies the key, both tokens and the plugin config to a new Mac; `~/.claude` and `~/.codex` come along with the variables.
+
+The daily `backup.sh` (in the work folder) pushes `~/.claude` to the private repo `notbd/claude-config-backup`. It runs from launchd with no agent variables, so it sets `GH_CONFIG_DIR=~/.config/gh-agent` itself; without that it would get the read-only token and every push would fail.
+
+### Without the old Mac
+
+If the Mac is lost, first cut it off on github.com: delete the signing key "Agent Signing Key - Joan", and press Regenerate on "agent - Joan" and "read-only - Joan" so the old values stop working. The classic token lives in 1Password and stays valid. Then, on the new Mac:
+
+1. Install 1Password and sign in. In Settings > Developer, turn on the SSH agent, ask for approval on every request, and turn on Integrate with 1Password CLI.
+2. `git clone https://github.com/notbd/dotfiles.git ~/.dotfiles && zsh ~/.dotfiles/bootstrap.sh`, then `git -C ~/.dotfiles remote set-url origin git@github.com:notbd/dotfiles.git` so my pushes go over SSH. The repo is public, so the clone needs no login.
+3. `git clone ssh://git@github.com/notbd/claude-config-backup.git /tmp/cc && rsync -a --exclude .git /tmp/cc/ ~/.claude/` (Touch ID). The `ssh://` form on purpose: `.gitconfig` sends `git@github.com:notbd/` fetches to HTTPS, and the read-only token is not there yet. This brings back the agent variables, the deny rules, the hooks and the rules.
+4. `op plugin init gh`: Search in 1Password, pick "GitHub CLI Token", use it as the global default. Skip the `echo … >> ~/.zshrc` it prints.
+5. `ssh-keygen -t ed25519 -N '' -C 'agent-signing (Claude Code, Codex)' -f ~/.ssh/agent_signing`. Add the `.pub` on GitHub as a Signing Key named "Agent Signing Key - <this Mac's name>", put it in place of the agent line in `ssh/.ssh/allowed_signers`, and commit.
+6. Log the two regenerated tokens in with the agent and read-only commands above, then `command gh config set -h github.com git_protocol ssh`.
+7. Open Claude Code once so `harness-sync.py` writes the Codex variables and hooks, then trust the hooks in Codex's `/hooks`.
+8. `/usr/bin/python3 ~/.claude/hooks/agent-git-check.py` must print `三套 Git 身份都正常`. Anything else names the piece that is still missing.
 
 ## License
 
