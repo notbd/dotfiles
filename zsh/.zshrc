@@ -100,3 +100,6 @@ if (( $+commands[starship] )) && [[ $TERM_PROGRAM != Apple_Terminal ]]; then   #
   export STARSHIP_CONFIG=~/.config/starship/starship.toml
   eval "$(starship init zsh)"
 fi
+
+[[ ":$PATH:" != *":$HOME/.config/kaku/zsh/bin:"* ]] && export PATH="$HOME/.config/kaku/zsh/bin:$PATH" # Kaku PATH Integration
+[[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && source "$HOME/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
