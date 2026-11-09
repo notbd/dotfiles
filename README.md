@@ -55,7 +55,7 @@ All three tokens expire on 2027-11-01. To renew, press Regenerate on each token'
 
 The last two differ only in `GH_CONFIG_DIR`; the check warns if both directories end up with the same token. `command` skips the 1Password plugin, whose `GH_TOKEN` makes `gh` refuse to log in, and `--insecure-storage` keeps the token out of the keychain entry every config directory shares. `migrate.sh` copies the key, both tokens and the plugin config to a new Mac; the variables come with the dotfiles.
 
-The daily `backup.sh` (in the work folder) pushes `~/.claude` to the private repo `notbd/claude-config-backup`. It runs from launchd with no agent variables, so it sets `GH_CONFIG_DIR=~/.config/gh-agent` itself; without that it would get the read-only token and every push would fail.
+`~/.claude` has no backup right now: the daily backup stopped on 2026-11-04, and a new backup system is not built yet. The private repo `notbd/claude-config-backup` keeps its last push, from 2026-11-03.
 
 ### Without the old Mac
 
@@ -63,7 +63,7 @@ If the Mac is lost, first cut it off on github.com: delete the signing key "Agen
 
 1. Install 1Password and sign in. In Settings > Developer, turn on the SSH agent, ask for approval on every request, and turn on Integrate with 1Password CLI.
 2. `git clone https://github.com/notbd/dotfiles.git ~/.dotfiles && zsh ~/.dotfiles/bootstrap.sh`, then `git -C ~/.dotfiles remote set-url origin git@github.com:notbd/dotfiles.git` so my pushes go over SSH. The repo is public, so the clone needs no login.
-3. `git clone ssh://git@github.com/notbd/claude-config-backup.git /tmp/cc && rsync -a --exclude .git /tmp/cc/ ~/.claude/` (Touch ID). The `ssh://` form on purpose: `.gitconfig` sends `git@github.com:notbd/` fetches to HTTPS, and the read-only token is not there yet. This brings back the deny rules, the hooks and the rules.
+3. `git clone ssh://git@github.com/notbd/claude-config-backup.git /tmp/cc && rsync -a --exclude .git /tmp/cc/ ~/.claude/` (Touch ID). The `ssh://` form on purpose: `.gitconfig` sends `git@github.com:notbd/` fetches to HTTPS, and the read-only token is not there yet. This brings back the deny rules, the hooks and the rules as they were on 2026-11-03 (see above); redo anything changed since.
 4. `op plugin init gh`: Search in 1Password, pick "GitHub CLI Token", use it as the global default. Skip the `echo … >> ~/.zshrc` it prints.
 5. `ssh-keygen -t ed25519 -N '' -C 'agent-signing (Claude Code, Codex)' -f ~/.ssh/agent_signing`. Add the `.pub` on GitHub as a Signing Key named "Agent Signing Key - <this Mac's name>", put it in place of the agent line in `ssh/.ssh/allowed_signers`, and commit.
 6. Log the two regenerated tokens in with the agent and read-only commands above, then `command gh config set -h github.com git_protocol ssh`.
